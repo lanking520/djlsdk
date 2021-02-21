@@ -1,7 +1,7 @@
 from typing import List
 import torch
 
-from main import get_djl_template
+from base import get_djl_template
 
 
 def export_pytorch(module: torch.nn.Module, name: str, sample_input: List[torch.Tensor]):

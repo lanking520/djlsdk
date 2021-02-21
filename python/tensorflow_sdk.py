@@ -1,7 +1,7 @@
 from typing import List
 
 import tensorflow as tf
-from main import get_djl_template
+from base import get_djl_template
 
 
 def export_tensorflow(model: tf.Module, name: str, sample_input: List[tf.Tensor]):

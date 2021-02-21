@@ -6,6 +6,7 @@ from typing import List
 
 def get_djl_template(model_path: str, sample_input: List[numpy.ndarray], deps: str):
     lines = ["# DJL example",
+             "Install Java 8 or above"
              "To start with, just run the followings:\n",
              "```",
              "./gradlew run --args=\"" + model_path + "\"",

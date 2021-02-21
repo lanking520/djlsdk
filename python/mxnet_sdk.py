@@ -3,7 +3,7 @@ from mxnet import gluon
 
 from typing import List
 
-from main import get_djl_template
+from base import get_djl_template
 
 
 def export_mxnet(model: gluon.HybridBlock, name: str, sample_input: List[mx.ndarray.NDArray]):
