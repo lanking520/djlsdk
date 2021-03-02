@@ -1,8 +1,10 @@
 package ai.djl.examples;
 
 import ai.djl.inference.Predictor;
+import ai.djl.ndarray.NDArray;
 import ai.djl.ndarray.NDList;
 import ai.djl.ndarray.NDManager;
+import ai.djl.ndarray.types.Shape;
 import ai.djl.ndarray.types.DataType;
 import ai.djl.repository.zoo.*;
 
