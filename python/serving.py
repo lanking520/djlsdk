@@ -33,12 +33,13 @@ def _set_str(value: str) -> bytes:
     return struct.pack(">h", len(value)) + bytes(value, "utf8")
 
 
-def _get_char(encoded: bytearray, idx: int, length: int) -> Tuple[str, int]:
-    return encoded[idx:idx + length].decode("utf8"), idx + length
+def _get_char(encoded: bytearray, idx: int) -> Tuple[str, int]:
+    chr_size = 2
+    return chr(struct.unpack(">h", encoded[idx:idx + chr_size])[0]), idx + chr_size
 
 
 def _set_char(value: str) -> bytes:
-    return bytes(value, "utf8")
+    return struct.pack('>h', ord(value))
 
 
 def shape_encode(shape: Tuple[int], arr: bytearray):
@@ -47,7 +48,10 @@ def shape_encode(shape: Tuple[int], arr: bytearray):
     for ele in shape:
         arr.extend(_set_int(ele))
         layout += "?"
-    arr.extend(_set_char(layout))
+
+    arr.extend(_set_int(len(layout)))
+    for ele in layout:
+        arr.extend(_set_char(ele))
 
 
 def shape_decode(encoded: bytearray, idx: int) -> Tuple[Tuple, int]:
@@ -56,7 +60,9 @@ def shape_decode(encoded: bytearray, idx: int) -> Tuple[Tuple, int]:
     for _ in range(length):
         dim, idx = _get_int(encoded, idx)
         shape.append(dim)
-    _, idx = _get_char(encoded, idx, length)
+    layout_len, idx = _get_int(encoded, idx)
+    for _ in range(layout_len):
+        _, idx = _get_char(encoded, idx)
     return tuple(shape), idx
 
 
