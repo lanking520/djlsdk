@@ -42,11 +42,20 @@ def _set_char(value: str) -> bytes:
     return struct.pack('>h', ord(value))
 
 
+def _get_long(encoded: bytearray, idx: int) -> Tuple[int, int]:
+    long_size = 8
+    return struct.unpack(">q", encoded[idx:idx + long_size])[0], idx + long_size
+
+
+def _set_long(value: int) -> bytes:
+    return struct.pack(">q", value)
+
+
 def shape_encode(shape: Tuple[int], arr: bytearray):
     arr.extend(_set_int(len(shape)))
     layout = ""
     for ele in shape:
-        arr.extend(_set_int(ele))
+        arr.extend(_set_long(ele))
         layout += "?"
 
     arr.extend(_set_int(len(layout)))
@@ -58,7 +67,7 @@ def shape_decode(encoded: bytearray, idx: int) -> Tuple[Tuple, int]:
     length, idx = _get_int(encoded, idx)
     shape = []
     for _ in range(length):
-        dim, idx = _get_int(encoded, idx)
+        dim, idx = _get_long(encoded, idx)
         shape.append(dim)
     layout_len, idx = _get_int(encoded, idx)
     for _ in range(layout_len):
